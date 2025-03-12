@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"log"
 	"math/rand/v2"
 	"net/http"
 	"os"
@@ -12,8 +13,10 @@ import (
 
 	"github.com/Debsnil24/PexelAPI-Go.git/models"
 )
-var PhotoApi = os.Getenv("PHOTO_API")
-var VideoApi = os.Getenv("VIDEO_API")
+
+var PhotoApi string
+var VideoApi string
+
 type Client struct {
 	*models.Client
 }
@@ -29,7 +32,7 @@ func (c *Client)requestDoWithAuth(method, url string) (*http.Response, error) {
 		return nil, err
 	}
 
-	req.Header.Add("Authorization", c.Token)
+	req.Header.Add("Authorization", os.Getenv("PEXEL_TOKEN"))
 	resp, err := c.HC.Do(req)
 	if err != nil {
 		return resp, err
@@ -44,6 +47,10 @@ func (c *Client)requestDoWithAuth(method, url string) (*http.Response, error) {
 }
 
 func (c *Client)SearchPhotos(query string, perPage, page int) (*models.SearchResult, error) {
+	if PhotoApi == "" {
+		log.Fatal("Photo Api is empty")
+	}
+	
 	url := fmt.Sprintf(PhotoApi+"/search?query=%s&per_page=%d&page=%d",query,perPage,page)
 
 	response, err := c.requestDoWithAuth("GET", url)
@@ -107,4 +114,54 @@ func (c *Client)GetRandomPhoto() (*models.Photo, error) {
 		return &result.Photos[0], nil
 	}
 	return nil, err
+}
+
+func (c *Client)SearchVideo(query string, perPage, page int) (*models.VideoSearchResult, error) {
+	url := fmt.Sprintf(VideoApi+"/search?query=%s&per_page=%d&page=%d",query,perPage,page)
+
+	response, err := c.requestDoWithAuth("GET", url)
+	if err != nil{
+		return nil, err
+	}
+	defer response.Body.Close()
+
+	data, err := io.ReadAll(response.Body)
+	if err != nil {
+		return nil, err
+	}
+	var result models.VideoSearchResult
+	err = json.Unmarshal(data, &result)
+	return &result , err
+}
+
+func (c *Client)PopularVideo(perPage, page int) (*models.PopularVideos, error) {
+	url := fmt.Sprintf(VideoApi+"/popular?per_page=%d&page=%d",perPage,page)
+
+	response, err := c.requestDoWithAuth("GET", url)
+	if err != nil{
+		return nil, err
+	}
+	defer response.Body.Close()
+
+	data, err := io.ReadAll(response.Body)
+	if err != nil {
+		return nil, err
+	}
+	var result models.PopularVideos
+	err = json.Unmarshal(data, &result)
+	return &result , err
+}
+
+func (c *Client)GetRandomVideo() (*models.Video, error) {
+	rand.New(rand.NewPCG(uint64(time.Now().UnixNano()), uint64(time.Now().UnixNano() >> 32)))
+	randNum := rand.IntN(1001)
+	result, err := c.PopularVideo(1,randNum)
+	if err == nil && len(result.Videos) == 1 {
+		return &result.Videos[0], nil
+	}
+	return nil, err
+}
+
+func (c *Client)GetRemainingRequest() int32 {
+	return c.RemainingTime
 }

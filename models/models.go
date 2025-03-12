@@ -12,7 +12,7 @@ type SearchResult struct {
 	Page         int32   `json:"page"`
 	PerPage      int32   `json:"per_page"`
 	TotalResults int32   `json:"total_results"`
-	NextPage     int32   `json:"next_page"`
+	NextPage     string   `json:"next_page"`
 	Photos       []Photo `json:"photos"`
 }
 
@@ -39,8 +39,51 @@ type PhotoSource struct {
 }
 
 type CuratedResult struct {
+	Page     int32   `json:"page"`
+	PerPage  int32   `json:"per_page"`
+	NextPage string   `json:"next_page"`
+	Photos   []Photo `json:"photos"`
+}
+
+type VideoSearchResult struct {
 	Page         int32   `json:"page"`
 	PerPage      int32   `json:"per_page"`
-	NextPage     int32   `json:"next_page"`
-	Photos       []Photo `json:"photos"`
+	TotalResults int32   `json:"total_results"`
+	NextPage     string   `json:"next_page"`
+	Videos       []Video `json:"videos"`
+}
+
+type Video struct {
+	ID            int32           `json:"id"`
+	Width         int32           `json:"width"`
+	Height        int32           `json:"height"`
+	URL           string          `json:"url"`
+	Image         string          `json:"image"`
+	FullRes       interface{}     `json:"full_res"`
+	Duration      float64         `json:"duration"`
+	VideoFile     []VideoFiles    `json:"video_file"`
+	VideoPictures []VideoPictures `json:"video_pictures"`
+}
+
+type VideoFiles struct {
+	ID       int32  `json:"id"`
+	Quality  string `json:"quality"`
+	FileType string `json:"file_type"`
+	Width    int32  `json:"width"`
+	Height   int32  `json:"height"`
+	Link     string `json:"link"`
+}
+
+type VideoPictures struct {
+	ID      int32  `json:"id"`
+	Picture string `json:"picture"`
+	Nr      int32  `json:"nr"`
+}
+
+type PopularVideos struct {
+	Page         int32   `json:"page"`
+	PerPage      int32   `json:"per_page"`
+	TotalResults int32   `json:"total_results"`
+	URL          string  `json:"url"`
+	Videos       []Video `json:"videos"`
 }
