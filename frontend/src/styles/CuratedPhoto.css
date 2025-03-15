@@ -1,0 +1,23 @@
+/* CuratedPhoto.css */
+
+.curated-photo-container {
+    position: relative;
+    padding: 10px 10px;
+    overflow: hidden;
+    margin: 20px;
+    box-shadow: 0 0 5px 5px rgba(0, 0, 0, 0.2);
+    border-radius: 5mm;
+    background-color: #002137;
+}
+
+.splide__slide {
+    min-width: 450px;
+    min-height: auto;
+    padding: 5px;
+}
+
+.curated-photo-media {
+    padding: 0px;
+    border-radius: 20px;
+    
+}

@@ -1,0 +1,34 @@
+/* Navbar.css */
+.navbar {
+    background-color: #001523;
+    color: #fff;
+    padding: 10px 0;
+    border-radius: 2mm;
+}
+
+.navbar-container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.navbar-brand-container {
+    display: flex;
+    padding: 0 10px;
+    align-items: center;
+}
+
+.navbar-logo {
+    height: 30px;
+    margin-right: 5px;
+    margin-left: 5px;
+}
+
+.navbar-switch-container {
+    display: flex;
+    justify-content:center;
+    padding-right: 10px;
+    align-items:center;
+}
+.switch {
+    padding-left: 10px;
+}

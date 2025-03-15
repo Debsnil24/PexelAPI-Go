@@ -1,0 +1,26 @@
+/* PopularVideo.css */
+
+.popular-video-container {
+  position: relative;
+  padding: 10px 10px;
+  margin: 20px;
+  box-shadow: 0 0 5px 5px rgba(0, 0, 0, 0.2);
+  border-radius: 7mm;
+  background-color: #002137;
+  /* Add some vertical padding */
+}
+
+.splide__slide {
+  min-width: 350px;
+  max-height: auto;
+  padding: 5px;
+}
+
+
+.popular-video-media {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 20px;
+  /* Maintain aspect ratio and cover the area */
+}

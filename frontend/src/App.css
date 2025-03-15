@@ -1,0 +1,8 @@
+/* Global Styles */
+body {
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+    background-color: #002137;
+  }
+  

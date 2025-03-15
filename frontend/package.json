@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "proxy":"http://localhost:9000",
+  "proxy": "http://localhost:9000",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
@@ -16,6 +16,8 @@
     "@fontsource/roboto": "^5.2.5",
     "@mui/icons-material": "^6.4.7",
     "@mui/material": "^6.4.7",
+    "@splidejs/react-splide": "^0.7.12",
+    "@splidejs/splide-extension-auto-scroll": "^0.5.3",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },

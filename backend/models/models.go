@@ -61,7 +61,7 @@ type Video struct {
 	Image         string          `json:"image"`
 	FullRes       interface{}     `json:"full_res"`
 	Duration      float64         `json:"duration"`
-	VideoFile     []VideoFiles    `json:"video_file"`
+	VideoFiles     []VideoFiles    `json:"video_files"`
 	VideoPictures []VideoPictures `json:"video_pictures"`
 }
 
