@@ -1,0 +1,50 @@
+/* Footer.css */
+.footer {
+    background-color: #001523; /* Dark blue background */
+    padding: 10px;
+    text-align: center;
+    margin-top: auto;
+    color: white; /* Set default text color to white */
+  }
+  
+  .footer-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .copyright {
+    margin-bottom: 10px;
+  }
+  
+  .footer-link {
+    color: white; /* White link color */
+    text-decoration: none;
+  }
+  
+  .footer-link:hover {
+    text-decoration: underline;
+  }
+  
+  .social-links {
+    display: flex;
+    gap: 20px;
+    margin-top: 10px;
+  }
+  
+  .social-link {
+    display: flex;
+    align-items: center;
+    color: white; /* White social link color */
+    text-decoration: none;
+    gap: 5px;
+  }
+  
+  .social-link:hover {
+    text-decoration: underline;
+  }
+  
+  .social-icon {
+    font-size: 1.2em;
+    color: white; /* White icon color */
+  }

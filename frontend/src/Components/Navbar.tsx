@@ -1,7 +1,7 @@
 import "../styles/Navbar.css";
 import "./Navbar-Component/MUISwitch";
 import "./Navbar-Component/SearchBar";
-//import MaterialUISwitch from "./Navbar-Component/MUISwitch";
+import MaterialUISwitch from "./Navbar-Component/MUISwitch";
 import SearchBar from "./Navbar-Component/SearchBar";
 import { Link } from "@mui/material";
 const Navbar = () => {
@@ -17,9 +17,9 @@ const Navbar = () => {
           <div className="searchbar">
             <SearchBar />
           </div>
-          {/* <div className="switch">
+          <div className="switch">
             <MaterialUISwitch />
-          </div> */}
+          </div>
         </div>
       </div>
     </nav>

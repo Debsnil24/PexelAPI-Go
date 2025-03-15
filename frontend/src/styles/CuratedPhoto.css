@@ -2,7 +2,9 @@
 
 .curated-photo-container {
     position: relative;
-    padding: 10px 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-bottom: 10px;
     overflow: hidden;
     margin: 20px;
     box-shadow: 0 0 5px 5px rgba(0, 0, 0, 0.2);
@@ -14,10 +16,33 @@
     min-width: 450px;
     min-height: auto;
     padding: 5px;
+    display: flex; /* Add flexbox to center content */
+    justify-content: center; /* Horizontally center */
+    align-items: center; /* Vertically center */
 }
 
 .curated-photo-media {
     padding: 0px;
     border-radius: 20px;
-    
+    object-fit: contain; /* Preserve aspect ratio and fit within bounds */
+    width: 100%; /* Ensure it fills the available slide width */
+    height: 100%; /* Ensure it fills the available slide height */
+    background-color: white; /* Fill empty space with white */
+}
+
+.label-photo {
+    display: flex;
+    /* background-color: #005f7a3c; */
+    max-width: fit-content;
+    max-height: fit-content;
+    /* border-radius: 15px; */
+    /* justify-content: center; */
+    /* align-items: center; */
+    margin-left: 15px;
+}
+
+.heading-photo {
+    color: white;
+    /* padding-left: 8px; */
+    margin: auto;
 }
