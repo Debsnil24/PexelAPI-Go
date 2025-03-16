@@ -103,3 +103,19 @@ export const getPopularVideos = async (): Promise<PopularVideosResponse | null> 
         return null;
     }
 };
+
+export const getRandomPhoto = async () => {
+    try {
+        const resp = await axios.get<Photo>("/api/photo/curated");
+
+        console.log("Curated Photo:",resp.data);
+
+        // return only the photo array.
+        console.log([resp.data])
+        return [resp.data];
+
+    } catch (error) {
+        console.error("Unable to get Curated Photos", error);
+        return [];
+    }
+};

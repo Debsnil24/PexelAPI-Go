@@ -1,14 +1,13 @@
 import React, { useState } from "react";
 import { CardMedia, Box, IconButton } from "@mui/material";
 import ShuffleOutlinedIcon from "@mui/icons-material/ShuffleOutlined";
-import "../styles/PopularVideo.css"; // Import the CSS
+import "../styles/PopularVideo.css";
 import { Splide, SplideSlide } from "@splidejs/react-splide";
 import "@splidejs/react-splide/css";
 import "@splidejs/react-splide/css/core";
-import RandomMedia from "./RandomMedia";
-import { getPopularVideos } from "../routes"; // Adjust the import path
+import { getPopularVideos } from "../routes";
 import { useQuery } from "@tanstack/react-query";
-
+import MediaDialog from "./MediaModal";
 
 interface VideoFile {
   id: number;
@@ -37,22 +36,25 @@ interface Video {
   video_pictures: VideoPicture[];
 }
 
-
 const PopularVideo: React.FC = () => {
   const splideOptions = {
-    type: "loop", // Loop back to the beginning when reaching the end
-    perPage: 5, // Number of items visible per page
-    perMove: 1, // Move one item at a time
-    rewind: true, // Rewind to start when the end is reached
-    pagination: false, // Enable pagination dots
+    type: "loop",
+    perPage: 5,
+    perMove: 1,
+    rewind: true,
+    pagination: false,
   };
   const [openDialog, setOpenDialog] = useState(false);
-  const handleOpenDialog = () => {
+  const [selectedMediaSrc, setSelectedMediaSrc] = useState<string | null>(null);
+
+  const handleOpenDialog = (mediaSrc: string) => {
+    setSelectedMediaSrc(mediaSrc);
     setOpenDialog(true);
   };
 
   const handleCloseDialog = () => {
     setOpenDialog(false);
+    setSelectedMediaSrc(null);
   };
 
   const { data, isLoading, isError, error } = useQuery<{ videos: Video[] }>({
@@ -60,7 +62,7 @@ const PopularVideo: React.FC = () => {
     queryFn: async () => {
       const response = await getPopularVideos();
       if (!response) {
-        throw new Error('Failed to fetch popular videos');
+        throw new Error("Failed to fetch popular videos");
       }
       return { videos: response.videos };
     },
@@ -76,6 +78,24 @@ const PopularVideo: React.FC = () => {
     return <Box>Error: {error?.message}</Box>;
   }
 
+  const findBestQualityLink = (videoFiles: VideoFile[]): string | null => {
+    const checkQuality = (quality: string): string | null => {
+      const file = videoFiles.find((file) => file.quality === quality);
+      return file ? file.link : null;
+    };
+
+    const uhdLink = checkQuality("uhd");
+    if (uhdLink) return uhdLink;
+
+    const hdLink = checkQuality("hd");
+    if (hdLink) return hdLink;
+
+    const sdLink = checkQuality("sd");
+    if (sdLink) return sdLink;
+
+    return null;
+  };
+
   return (
     <Box className="popular-video-container">
       <div className="label-video">
@@ -85,7 +105,6 @@ const PopularVideo: React.FC = () => {
           sx={{
             color: "whitesmoke",
           }}
-          onClick={handleOpenDialog}
         >
           <ShuffleOutlinedIcon fontSize="medium" />
         </IconButton>
@@ -97,11 +116,22 @@ const PopularVideo: React.FC = () => {
               component="img"
               className="popular-video-media"
               src={video.image}
+              onClick={() => {
+                const bestQualityLink = findBestQualityLink(video.video_files);
+                if (bestQualityLink) {
+                  handleOpenDialog(bestQualityLink);
+                }
+              }}
             />
           </SplideSlide>
         ))}
       </Splide>
-      <RandomMedia open={openDialog} onClose={handleCloseDialog} />
+      <MediaDialog
+        open={openDialog}
+        onClose={handleCloseDialog}
+        mediaSrc={selectedMediaSrc || ""}
+        mediaType="video"
+      />
     </Box>
   );
 };

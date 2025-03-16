@@ -5,7 +5,7 @@ import { Splide, SplideSlide } from "@splidejs/react-splide";
 import "@splidejs/react-splide/css";
 import "@splidejs/react-splide/css/core";
 import ShuffleOutlinedIcon from "@mui/icons-material/ShuffleOutlined";
-import RandomMedia from "./RandomMedia";
+import MediaDialog from "./MediaModal";
 import { useQuery } from "@tanstack/react-query";
 import { getCuratePhotos } from "../routes";
 
@@ -40,16 +40,19 @@ const CuratedPhoto: React.FC = () => {
     pagination: false,
   };
   const [openDialog, setOpenDialog] = useState(false);
+  const [selectedMediaSrc, setSelectedMediaSrc] = useState<string | null>(null);
 
-  const handleOpenDialog = () => {
+  const handleOpenDialog = (mediaSrc: string) => {
+    setSelectedMediaSrc(mediaSrc);
     setOpenDialog(true);
   };
 
   const handleCloseDialog = () => {
     setOpenDialog(false);
+    setSelectedMediaSrc(null);
   };
 
-  const { data, isLoading, isError, error } = useQuery<Photo[]>({ // Correct type use here
+  const { data, isLoading, isError, error } = useQuery<Photo[]>({
     queryKey: ["curatedPhotos"],
     queryFn: getCuratePhotos,
     refetchOnWindowFocus: false,
@@ -61,7 +64,7 @@ const CuratedPhoto: React.FC = () => {
   }
 
   if (isError) {
-    return <Box>Error: {error?.message}</Box>; // added optional chaining here.
+    return <Box>Error: {error?.message}</Box>;
   }
 
   return (
@@ -73,7 +76,6 @@ const CuratedPhoto: React.FC = () => {
           sx={{
             color: "whitesmoke",
           }}
-          onClick={handleOpenDialog}
         >
           <ShuffleOutlinedIcon fontSize="medium" />
         </IconButton>
@@ -85,11 +87,17 @@ const CuratedPhoto: React.FC = () => {
               component="img"
               className="curated-photo-media"
               image={photo.src.large}
+              onClick={() => handleOpenDialog(photo.src.large)}
             />
           </SplideSlide>
         ))}
       </Splide>
-      <RandomMedia open={openDialog} onClose={handleCloseDialog} />
+      <MediaDialog
+        open={openDialog}
+        onClose={handleCloseDialog}
+        mediaSrc={selectedMediaSrc || ""}
+        mediaType="image"
+      />
     </Box>
   );
 };

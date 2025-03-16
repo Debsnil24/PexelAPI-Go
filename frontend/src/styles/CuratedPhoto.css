@@ -19,6 +19,16 @@
     display: flex; /* Add flexbox to center content */
     justify-content: center; /* Horizontally center */
     align-items: center; /* Vertically center */
+    cursor: pointer;
+    transition: 
+        scale 0.25s ease-in,
+        opacity 0.25s ease-in,
+        filter 0.25s ease-in;
+    &:hover {
+        scale: 1.02;
+        border-radius: 20px;
+        
+    }
 }
 
 .curated-photo-media {
@@ -28,6 +38,7 @@
     width: 100%; /* Ensure it fills the available slide width */
     height: 100%; /* Ensure it fills the available slide height */
     background-color: white; /* Fill empty space with white */
+    
 }
 
 .label-photo {
