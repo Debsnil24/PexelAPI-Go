@@ -7,7 +7,7 @@ import "@splidejs/react-splide/css/core";
 import ShuffleOutlinedIcon from "@mui/icons-material/ShuffleOutlined";
 import MediaDialog from "./MediaModal";
 import { useQuery } from "@tanstack/react-query";
-import { getCuratePhotos } from "../routes";
+import { getCuratePhotos, getRandomPhoto } from "../routes";
 
 interface PhotoSrc {
   original: string;
@@ -52,36 +52,65 @@ const CuratedPhoto: React.FC = () => {
     setSelectedMediaSrc(null);
   };
 
-  const { data, isLoading, isError, error } = useQuery<Photo[]>({
+  const {
+    data: curated,
+    isLoading: curatedLoading,
+    isError: curatedError,
+    error: curatedErrorMsg,
+  } = useQuery<Photo[]>({
     queryKey: ["curatedPhotos"],
     queryFn: getCuratePhotos,
     refetchOnWindowFocus: false,
     staleTime: 1000 * 60 * 5,
   });
 
-  if (isLoading) {
+  const {
+    data: random,
+    isLoading: randomLoading,
+    isError: randomError,
+    error: randomErrorMsg,
+    refetch: refetchRandomPhoto,
+  } = useQuery<Photo[]>({
+    queryKey: ["RandomPhoto"],
+    queryFn: getRandomPhoto,
+  });
+
+  if (curatedLoading || randomLoading) {
     return <Box>Loading...</Box>;
   }
 
-  if (isError) {
-    return <Box>Error: {error?.message}</Box>;
+  if (curatedError || randomError) {
+    if (curatedError) {
+      return <Box>Error: {curatedErrorMsg?.message}</Box>;
+    }
+    if (randomError) {
+      return <Box>Error: {randomErrorMsg?.message}</Box>;
+    }
   }
 
   return (
     <Box className="curated-photo-container">
-      <div className="label-photo">
-        <h1 className="heading-photo">Curated Photos</h1>
-        <IconButton
-          className="randomize-photo"
-          sx={{
-            color: "whitesmoke",
-          }}
-        >
-          <ShuffleOutlinedIcon fontSize="medium" />
-        </IconButton>
-      </div>
+      {random?.map((photo) => (
+        <div className="label-photo">
+          <h1 className="heading-photo">Curated Photos</h1>
+
+          <IconButton
+            className="randomize-photo"
+            sx={{
+              color: "whitesmoke",
+            }}
+            onClick={() => {
+              refetchRandomPhoto();
+              handleOpenDialog(photo.src.large);
+            }}
+          >
+            <ShuffleOutlinedIcon fontSize="medium" />
+          </IconButton>
+        </div>
+      ))}
+
       <Splide options={splideOptions}>
-        {data?.map((photo) => (
+        {curated?.map((photo) => (
           <SplideSlide key={photo.id} sx={{ Margin: "10px" }}>
             <CardMedia
               component="img"

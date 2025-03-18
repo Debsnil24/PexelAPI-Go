@@ -5,7 +5,7 @@ import "../styles/PopularVideo.css";
 import { Splide, SplideSlide } from "@splidejs/react-splide";
 import "@splidejs/react-splide/css";
 import "@splidejs/react-splide/css/core";
-import { getPopularVideos } from "../routes";
+import { getPopularVideos, getRandomVideo } from "../routes";
 import { useQuery } from "@tanstack/react-query";
 import MediaDialog from "./MediaModal";
 
@@ -57,7 +57,12 @@ const PopularVideo: React.FC = () => {
     setSelectedMediaSrc(null);
   };
 
-  const { data, isLoading, isError, error } = useQuery<{ videos: Video[] }>({
+  const {
+    data: popular,
+    isLoading: popularLoading,
+    isError: popularError,
+    error: popularErrormsg,
+  } = useQuery<{ videos: Video[] }>({
     queryKey: ["popularVideos"],
     queryFn: async () => {
       const response = await getPopularVideos();
@@ -70,12 +75,28 @@ const PopularVideo: React.FC = () => {
     staleTime: 1000 * 60 * 5,
   });
 
-  if (isLoading) {
+  const {
+    data: random,
+    isLoading: randomLoading,
+    isError: randomError,
+    error: randomErrormsg,
+    refetch: refetchRandomVideo,
+  } = useQuery<Video[]>({
+    queryKey: ["randomVideo"],
+    queryFn: getRandomVideo,
+  });
+
+  if (popularLoading || randomLoading) {
     return <Box>Loading...</Box>;
   }
 
-  if (isError) {
-    return <Box>Error: {error?.message}</Box>;
+  if (popularError || randomError) {
+    if (popularError) {
+      return <Box>Error: {popularErrormsg?.message}</Box>;
+    }
+    if (randomError) {
+      return <Box>Error: {randomErrormsg?.message}</Box>;
+    }
   }
 
   const findBestQualityLink = (videoFiles: VideoFile[]): string | null => {
@@ -98,19 +119,30 @@ const PopularVideo: React.FC = () => {
 
   return (
     <Box className="popular-video-container">
-      <div className="label-video">
-        <h1 className="heading-video">Popular Videos</h1>
-        <IconButton
-          className="randomize-video"
-          sx={{
-            color: "whitesmoke",
-          }}
-        >
-          <ShuffleOutlinedIcon fontSize="medium" />
-        </IconButton>
-      </div>
+      {random?.map((video) => (
+        <div className="label-video">
+          <h1 className="heading-video">Popular Videos</h1>
+          <IconButton
+            className="randomize-video"
+            sx={{
+              color: "whitesmoke",
+            }}
+            onClick={() => {
+              refetchRandomVideo();
+              const bestQualityLink = findBestQualityLink(video.video_files);
+              if (bestQualityLink) {
+                handleOpenDialog(bestQualityLink);
+                
+              }
+            }}
+          >
+            <ShuffleOutlinedIcon fontSize="medium" />
+          </IconButton>
+        </div>
+      ))}
+
       <Splide options={splideOptions}>
-        {data?.videos.map((video) => (
+        {popular?.videos.map((video) => (
           <SplideSlide key={video.id} sx={{ Margin: "10px" }}>
             <CardMedia
               component="img"
