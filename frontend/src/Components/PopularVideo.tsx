@@ -119,9 +119,9 @@ const PopularVideo: React.FC = () => {
 
   return (
     <Box className="popular-video-container">
-      {random?.map((video) => (
-        <div className="label-video">
-          <h1 className="heading-video">Popular Videos</h1>
+      <div className="label-video">
+        <h1 className="heading-video">Popular Videos</h1>
+        {random?.map((video) => (
           <IconButton
             className="randomize-video"
             sx={{
@@ -132,14 +132,15 @@ const PopularVideo: React.FC = () => {
               const bestQualityLink = findBestQualityLink(video.video_files);
               if (bestQualityLink) {
                 handleOpenDialog(bestQualityLink);
-                
               }
+            
             }}
+            key={video.id}
           >
             <ShuffleOutlinedIcon fontSize="medium" />
           </IconButton>
-        </div>
-      ))}
+        ))}
+      </div>
 
       <Splide options={splideOptions}>
         {popular?.videos.map((video) => (
@@ -161,7 +162,7 @@ const PopularVideo: React.FC = () => {
       <MediaDialog
         open={openDialog}
         onClose={handleCloseDialog}
-        mediaSrc={selectedMediaSrc || ""}
+        mediaSrc={selectedMediaSrc || "https://videos.pexels.com/video-files/4990247/4990247-hd_1920_1080_30fps.mp4"}
         mediaType="video"
       />
     </Box>

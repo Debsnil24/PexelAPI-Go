@@ -4,7 +4,13 @@ import "./Navbar-Component/SearchBar";
 import MaterialUISwitch from "./Navbar-Component/MUISwitch";
 import SearchBar from "./Navbar-Component/SearchBar";
 import { Link } from "@mui/material";
-const Navbar = () => {
+import React from "react";
+
+type NavbarProps = {
+  onSearchClick: (value: boolean, srcTxt: string) => void;
+};
+
+const Navbar : React.FC<NavbarProps> = ({onSearchClick}) => {
   return (
     <nav className="navbar">
       <div className="navbar-container">
@@ -15,7 +21,7 @@ const Navbar = () => {
         </div>
         <div className="navbar-switch-container">
           <div className="searchbar">
-            <SearchBar />
+            <SearchBar onSearchClick={onSearchClick}/>
           </div>
           <div className="switch">
             <MaterialUISwitch />

@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import axios from "axios";
 
 interface PhotoSrc {
@@ -134,3 +135,48 @@ export const getRandomVideo = async () => {
     return [];
   }
 };
+
+export const SearchPhotos = async (SrcText: string): Promise<Photo[]> => {
+  try {
+    const resp = await axios.get<CuratedPhotosResponse>("/api/photo/search", {
+      params: {
+        query: SrcText,
+        per_page: 15,
+        page: 1,
+      },
+    });
+
+    console.log("Search Photo:", resp.data);
+
+    // return only the photo array.
+    return resp.data.photos;
+  } catch (error) {
+    console.error("Unable to get Curated Photos", error);
+    return [];
+  }
+};
+
+
+export const SearchVideos =
+  async (SrcTxt: string): Promise<PopularVideosResponse | null> => {
+    try {
+      const resp = await axios.get<PopularVideosResponse>(
+        "/api/video/search",
+        {
+          // Adjust your API endpoint
+          params: {
+            query: SrcTxt,
+            per_page: 15, // Adjust as needed
+            page: 1, // Adjust as needed
+          },
+        }
+      );
+
+      console.log("Popular Videos:", resp.data);
+
+      return resp.data;
+    } catch (error) {
+      console.error("Unable to get Popular Videos", error);
+      return null;
+    }
+  };

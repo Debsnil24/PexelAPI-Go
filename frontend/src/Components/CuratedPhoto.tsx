@@ -90,12 +90,12 @@ const CuratedPhoto: React.FC = () => {
 
   return (
     <Box className="curated-photo-container">
-      {random?.map((photo) => (
-        <div className="label-photo">
-          <h1 className="heading-photo">Curated Photos</h1>
-
+      <div className="label-photo">
+        <h1 className="heading-photo">Curated Photos</h1>
+        {random?.map((photo) => (
           <IconButton
             className="randomize-photo"
+            key={photo.id}
             sx={{
               color: "whitesmoke",
             }}
@@ -106,8 +106,8 @@ const CuratedPhoto: React.FC = () => {
           >
             <ShuffleOutlinedIcon fontSize="medium" />
           </IconButton>
-        </div>
-      ))}
+        ))}
+      </div>
 
       <Splide options={splideOptions}>
         {curated?.map((photo) => (
